@@ -7,6 +7,7 @@ namespace Grocery.Core.Interfaces.Repositories
         public List<GroceryListItem> GetAll();
 
         public List<GroceryListItem> GetAllOnGroceryListId(int id);
+        public List<GroceryListItem> GetAllOnProductId(int id);
 
         public GroceryListItem Add(GroceryListItem item);
 
