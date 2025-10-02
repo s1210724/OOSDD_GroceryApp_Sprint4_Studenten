@@ -13,7 +13,6 @@ namespace Grocery.App.ViewModels
 
         private readonly GlobalViewModel _global;
         private readonly IGroceryListService _groceryListService;
-        private readonly IAuthService _authService;
 
         public GroceryListViewModel(IGroceryListService groceryListService, GlobalViewModel global) 
         {
