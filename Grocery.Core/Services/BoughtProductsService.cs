@@ -18,9 +18,21 @@ namespace Grocery.Core.Services
             _clientRepository=clientRepository;
             _productRepository=productRepository;
         }
-        public List<BoughtProducts> Get(int? productId)
+        public List<BoughtProducts> Get(int productId)
         {
-            throw new NotImplementedException();
+            List<BoughtProducts> boughtProducts = new List<BoughtProducts>();
+            foreach (var item in _groceryListItemsRepository.GetAllOnProductId(productId))
+            {
+                boughtProducts.Add(CreateBoughtProduct(item.ProductId, item.GroceryListId));
+            }
+
+            return boughtProducts;
+        }
+
+        public BoughtProducts CreateBoughtProduct(int productId, int groceryListId)
+        {
+            GroceryList groceryList = _groceryListRepository.Get(groceryListId);
+            return new BoughtProducts(_clientRepository.Get(groceryList.ClientId), groceryList, _productRepository.Get(productId));
         }
 
         public Dictionary<int, int> AggregateProductSales()

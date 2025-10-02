@@ -31,6 +31,13 @@ namespace Grocery.Core.Services
             return groceryListItems;
         }
 
+        public List<GroceryListItem> GetAllOnProductId(int productId)
+        {
+            List<GroceryListItem> groceryListItems = _groceriesRepository.GetAll().Where(g => g.ProductId == productId).ToList();
+            FillService(groceryListItems);
+            return groceryListItems;
+        }
+
         public GroceryListItem Add(GroceryListItem item)
         {
             return _groceriesRepository.Add(item);

@@ -29,6 +29,11 @@ namespace Grocery.Core.Data.Repositories
             return groceryListItems.Where(g => g.GroceryListId == id).ToList();
         }
 
+        public List<GroceryListItem> GetAllOnProductId(int id)
+        {
+            return groceryListItems.Where(g => g.ProductId == id).ToList();
+        }
+
         public GroceryListItem Add(GroceryListItem item)
         {
             int newId = groceryListItems.Max(g => g.Id) + 1;
