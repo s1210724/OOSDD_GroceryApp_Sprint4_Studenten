@@ -22,5 +22,28 @@ namespace Grocery.Core.Services
         {
             throw new NotImplementedException();
         }
+
+        public Dictionary<int, int> AggregateProductSales()
+        {
+            var groceryOccurances = _groceryListItemsRepository.GetAll();
+            var productSales = new Dictionary<int, int>();
+
+            foreach (var item in groceryOccurances)
+            {
+                if (productSales.ContainsKey(item.ProductId))
+                    productSales[item.ProductId] += item.Amount;
+                else
+                    productSales[item.ProductId] = item.Amount;
+            }
+            return productSales;
+        }
+
+        public List<KeyValuePair<int, int>> GetTopProductSales(Dictionary<int, int> productSales, int topX)
+        {
+            return productSales
+                .OrderByDescending(p => p.Value)
+                .Take(topX)
+                .ToList();
+        }
     }
 }
