@@ -8,6 +8,7 @@ namespace Grocery.Core.Interfaces.Services
         public List<GroceryListItem> GetAll();
 
         public List<GroceryListItem> GetAllOnGroceryListId(int groceryListId);
+        public List<GroceryListItem> GetAllOnProductId(int productId);
 
         public GroceryListItem Add(GroceryListItem item);
 

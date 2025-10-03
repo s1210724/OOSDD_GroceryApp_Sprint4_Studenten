@@ -8,11 +8,13 @@ namespace Grocery.Core.Services
     {
         private readonly IGroceryListItemsRepository _groceriesRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IBoughtProductsService _boughtProductsService;
 
-        public GroceryListItemsService(IGroceryListItemsRepository groceriesRepository, IProductRepository productRepository)
+        public GroceryListItemsService(IGroceryListItemsRepository groceriesRepository, IProductRepository productRepository, IBoughtProductsService boughtProductsService)
         {
             _groceriesRepository = groceriesRepository;
             _productRepository = productRepository;
+            _boughtProductsService = boughtProductsService;
         }
 
         public List<GroceryListItem> GetAll()
@@ -25,6 +27,13 @@ namespace Grocery.Core.Services
         public List<GroceryListItem> GetAllOnGroceryListId(int groceryListId)
         {
             List<GroceryListItem> groceryListItems = _groceriesRepository.GetAll().Where(g => g.GroceryListId == groceryListId).ToList();
+            FillService(groceryListItems);
+            return groceryListItems;
+        }
+
+        public List<GroceryListItem> GetAllOnProductId(int productId)
+        {
+            List<GroceryListItem> groceryListItems = _groceriesRepository.GetAll().Where(g => g.ProductId == productId).ToList();
             FillService(groceryListItems);
             return groceryListItems;
         }
@@ -51,7 +60,22 @@ namespace Grocery.Core.Services
 
         public List<BestSellingProducts> GetBestSellingProducts(int topX = 5)
         {
-            throw new NotImplementedException();
+            return MapToBestSellingProducts(_boughtProductsService.GetTopProductSales(_boughtProductsService.AggregateProductSales(), topX));
+        }
+
+        private List<BestSellingProducts> MapToBestSellingProducts(List<KeyValuePair<int, int>> topProductSales)
+        {
+            var bestSellingProducts = new List<BestSellingProducts>();
+            int rank = 1;
+            foreach (var product in topProductSales)
+            {
+                var p = _productRepository.Get(product.Key);
+                if (p != null)
+                {
+                    bestSellingProducts.Add(new BestSellingProducts(p.Id, p.name, p.Stock, product.Value, rank++));
+                }
+            }
+            return bestSellingProducts;
         }
 
         private void FillService(List<GroceryListItem> groceryListItems)

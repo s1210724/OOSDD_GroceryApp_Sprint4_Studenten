@@ -19,12 +19,22 @@ namespace Grocery.App.ViewModels
         public BoughtProductsViewModel(IBoughtProductsService boughtProductsService, IProductService productService)
         {
             _boughtProductsService = boughtProductsService;
-            Products = new(productService.GetAll());
+            var allProducts = productService.GetAll();
+            if (allProducts == null || allProducts.Count == 0)
+            {
+                // Add a placeholder product if the list is empty
+                allProducts = [new Product(0, "Er zijn geen producten beschikbaar", 0)];
+            }
+            Products = new(allProducts);
         }
 
         partial void OnSelectedProductChanged(Product? oldValue, Product newValue)
         {
-            //Zorg dat de lijst BoughtProductsList met de gegevens die passen bij het geselecteerde product. 
+            BoughtProductsList.Clear();
+            foreach (var item in _boughtProductsService.Get(newValue.Id))
+            {
+                BoughtProductsList.Add(item);
+            }
         }
 
         [RelayCommand]
