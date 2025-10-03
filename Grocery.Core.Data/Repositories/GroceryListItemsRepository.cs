@@ -15,6 +15,7 @@ namespace Grocery.Core.Data.Repositories
                 new GroceryListItem(3, 1, 3, 4),
                 new GroceryListItem(4, 2, 1, 2),
                 new GroceryListItem(5, 2, 2, 5),
+                new GroceryListItem(6, 3, 4, 100),
             ];
         }
 
@@ -26,6 +27,11 @@ namespace Grocery.Core.Data.Repositories
         public List<GroceryListItem> GetAllOnGroceryListId(int id)
         {
             return groceryListItems.Where(g => g.GroceryListId == id).ToList();
+        }
+
+        public List<GroceryListItem> GetAllOnProductId(int id)
+        {
+            return groceryListItems.Where(g => g.ProductId == id).ToList();
         }
 
         public GroceryListItem Add(GroceryListItem item)

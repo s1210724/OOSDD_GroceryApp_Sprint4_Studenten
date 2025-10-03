@@ -105,6 +105,10 @@ namespace Grocery.App.ViewModels
             item.Product.Stock--;
             _productService.Update(item.Product);
             OnGroceryListChanged(GroceryList);
+
+            // MAUI seems to have an issue with updating the view if the first item in the list is changed. a dirty reload fixes this. But is not reccomended
+            //MyGroceryListItems = new ObservableCollection<GroceryListItem>(MyGroceryListItems);
+            //OnPropertyChanged(nameof(MyGroceryListItems));
         }
 
         [RelayCommand]
